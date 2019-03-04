@@ -22,3 +22,10 @@ export const complete = (id) => {
     id
   });
 }
+
+export const deleteItem = (id) => {
+  return ({
+    type: DELETE,
+    id
+  });
+}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addTodo, complete } from './components/actions/actions';
+import { addTodo, complete, deleteItem } from './components/actions/actions';
 import styled from 'styled-components';
 
 
@@ -28,13 +28,16 @@ class App extends Component {
         <ul>
           {
             this.props.todos.map(task => (
-              <StyledLi
-                key={task.id}
-                onClick={() => this.props.complete(task.id)}
-                completed={task.completed}
-              >
-              {task.value}
-              </StyledLi>
+              <div key={task.id}>
+                <StyledLi
+                  completed={task.completed}
+                >
+                  {task.value} 
+                  <span><button onClick={() => this.props.complete(task.id)}>✓</button></span>
+                  <span><button onClick={() => this.props.deleteItem(task.id)}>X</button></span>
+                </StyledLi>
+                
+              </div>
             ))
           }
         </ul>
@@ -44,11 +47,12 @@ class App extends Component {
 }
 
 // export App into HOC (connect), which will give it state and two props (addTodo, complete)
-export default connect(st => st, { addTodo, complete })(App);
+export default connect(st => st, { addTodo, complete, deleteItem })(App);
 
 
 const StyledLi = styled.li`
-  color: ${props => props.completed === true ? "green" : "blue"};  
+  color: ${props => props.completed === true ? "green" : "blue"};
+  text-decoration: ${props => props.completed === true ? "line-through" : "none"};
   :hover {
     cursor: pointer;
   }
