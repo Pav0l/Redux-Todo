@@ -1,7 +1,7 @@
 import { ADD_TODO, COMPLETE, DELETE } from '../actions/actions';
 
 const initState = {
-  todos: [],
+  todos: JSON.parse(localStorage.getItem('taskList')) || [],
 }
 
 export default function rootReducer(state = initState, action) {

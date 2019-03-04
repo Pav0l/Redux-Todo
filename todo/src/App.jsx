@@ -6,6 +6,13 @@ import styled from 'styled-components';
 
 class App extends Component {
 
+  componentDidUpdate() {
+    if (this.props.todos !== localStorage.getItem('taskList')) {
+      localStorage.removeItem('taskList');
+      localStorage.setItem('taskList', JSON.stringify(this.props.todos));
+    }
+  }
+
   submitHandler = e => {
     e.preventDefault();
     this.props.addTodo(e.target.firstChild.value);
