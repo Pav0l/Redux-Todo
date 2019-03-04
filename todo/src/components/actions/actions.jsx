@@ -15,7 +15,7 @@ export const addTodo = (inputValue) => {
 
 export const complete = (id) => {
   return ({
-    type: DELETE,
+    type: COMPLETE,
     id
   });
 }
