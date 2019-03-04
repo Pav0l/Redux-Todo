@@ -5,6 +5,7 @@ const initState = {
 }
 
 export default function rootReducer(state = initState, action) {
+  // Define what should happend with the DOM, when an action is called
   switch (action.type) {
     case ADD_TODO:
       return ({

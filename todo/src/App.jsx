@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addTodo, complete } from './components/actions/actions';
 import styled from 'styled-components';
-import uuid from 'uuid';
-// import TodoItem from './components/TodoItem';
 
 
 class App extends Component {
@@ -15,7 +13,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <div>
         <h1>Redux-list</h1>
@@ -32,7 +29,7 @@ class App extends Component {
           {
             this.props.todos.map(task => (
               <StyledLi
-                key={uuid()}
+                key={task.id}
                 onClick={() => this.props.complete(task.id)}
                 completed={task.completed}
               >
@@ -46,6 +43,7 @@ class App extends Component {
   }
 }
 
+// export App into HOC (connect), which will give it state and two props (addTodo, complete)
 export default connect(st => st, { addTodo, complete })(App);
 
 
