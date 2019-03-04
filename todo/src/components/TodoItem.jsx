@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function TodoItem() {
+export default function TodoItem({ value, completed }) {
   return (
     <li>
-      Do this task!
+      {value}
     </li>
   );
 }
