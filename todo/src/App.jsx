@@ -114,8 +114,8 @@ const AppWrapper = styled.div`
       color: grey;
       text-transform: capitalize;
       font-weight: 700;
-
-      .active {
+/* .active className passed down from React Routers NavLink */
+      &.active {
         color: rgb(0, 211, 237);
         border-bottom: 4px solid rgb(0, 211, 237);
       }
