@@ -8,9 +8,11 @@ export const DELETE = 'DELETE';
 export const addTodo = (inputValue) => {
   return ({ 
     type: ADD_TODO,
-    id: uuid(),
-    value: inputValue,
-    completed: false,
+    payload: {
+      id: uuid(),
+      value: inputValue,
+      completed: 'LIVE',
+    },
   });
 }
 
@@ -19,13 +21,13 @@ export const addTodo = (inputValue) => {
 export const complete = (id) => {
   return ({
     type: COMPLETE,
-    id
+    payload: id,
   });
 }
 
 export const deleteItem = (id) => {
   return ({
     type: DELETE,
-    id
+    payload: id,
   });
 }

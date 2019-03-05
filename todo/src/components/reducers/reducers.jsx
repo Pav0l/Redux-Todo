@@ -9,17 +9,18 @@ export default function rootReducer(state = initState, action) {
   switch (action.type) {
     case ADD_TODO:
       return ({
-        todos: [...state.todos, {id: action.id, value: action.value, completed: action.completed}],
+        todos: [...state.todos, {id: action.payload.id, value: action.payload.value, completed: action.payload.completed}],
       });
     case COMPLETE:
       return ({
         todos: state.todos.map(todo =>
-          todo.id === action.id ? { ...todo, completed: !todo.completed } : todo
+          todo.id === action.payload ? { ...todo, completed: 'DONE' } : todo
       )});
     case DELETE:
       return ({
-        todos: state.todos.filter(todo => todo.id !== action.id)
-      });
+        todos: state.todos.map(todo =>
+          todo.id === action.payload ? { ...todo, completed: 'ARCHIVED' } : todo
+      )});
     default:
       return state;
   }

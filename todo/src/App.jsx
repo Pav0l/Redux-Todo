@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Route, NavLink, withRouter } from 'react-router-dom';
 import { addTodo, complete, deleteItem } from './components/actions/actions';
 import styled from 'styled-components';
+import ListItem from './components/ListItem';
 
 
 class App extends Component {
@@ -20,18 +22,21 @@ class App extends Component {
     } else {
       this.props.addTodo(e.target.firstChild.value);
     }
-    // get input value from Refs
     e.target.firstChild.value = '';
   }
 
   render() {
+    const liveList = this.props.todos.filter(task => task.completed === 'LIVE');
+    const doneList = this.props.todos.filter(task => task.completed === 'DONE');
+    const delList = this.props.todos.filter(task => task.completed === 'ARCHIVED');
+
     return (
       <AppWrapper>
         <ListHeader>Redux-list</ListHeader>
         <nav>
-          <a href="#">Live</a>
-          <a href="#">Done</a>
-          <a href="#">Archived</a>
+          <NavLink exact to="/">Live</NavLink>
+          <NavLink to="/done">Done</NavLink>
+          <NavLink to="/archive">Archived</NavLink>
         </nav>
         <Form onSubmit={this.submitHandler}>
           <InputField
@@ -42,29 +47,51 @@ class App extends Component {
           <AddBtn type="submit">+</AddBtn>
         </Form>
 
-        <ul>
-          {
-            this.props.todos.map(task => (
-              <div key={task.id}>
-                <StyledLi
-                  completed={task.completed}
-                  >
-                  <CompleteBtn onClick={() => this.props.complete(task.id)}>✓</CompleteBtn>
-                  {task.value}                  
-                  <DeleteBtn onClick={() => this.props.deleteItem(task.id)}>X</DeleteBtn>
-                </StyledLi>
-                
-              </div>
-            ))
-          }
-        </ul>
+        <Route
+          exact
+          path="/"
+          render={props => (
+            <ListItem
+              {...props}
+              list={liveList}
+              complete={this.props.complete}
+              deleteItem={this.props.deleteItem}
+            />
+          )}
+        />
+
+        <Route
+          path="/done"
+          render={props => (
+            <ListItem
+            {...props}
+            list={doneList}
+            complete={this.props.complete}
+            deleteItem={this.props.deleteItem}
+            />
+          )}
+        />
+
+        <Route
+          path="/archive"
+          render={props => (
+            <ListItem
+            {...props}
+            list={delList}
+            complete={this.props.complete}
+            deleteItem={this.props.deleteItem}
+            />
+          )}
+        />
+
       </AppWrapper>
     );
   }
 }
 
 // export App into HOC (connect), which will give it state and two props (addTodo, complete)
-export default connect(st => st, { addTodo, complete, deleteItem })(App);
+// withRouter removes blocked updates of the DOM when you click on NavLink (without it, the list would not re-render on link click)
+export default withRouter(connect(st => st, { addTodo, complete, deleteItem })(App));
 
 const AppWrapper = styled.div`
   display: flex;
@@ -87,10 +114,11 @@ const AppWrapper = styled.div`
       color: grey;
       text-transform: capitalize;
       font-weight: 700;
-      :first-child {
+
+      .active {
         color: rgb(0, 211, 237);
         border-bottom: 4px solid rgb(0, 211, 237);
-        }
+      }
     }
   }
 
@@ -142,88 +170,5 @@ const AddBtn = styled.button`
 
   :hover {
     animation: rotate-center 0.6s linear both;
-  }
-`;
-
-const StyledLi = styled.li`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: ${props => props.completed === true ? "green" : "rgb(102, 102, 102)"};
-  list-style-type: none;
-  font-size: 1.2rem;
-  padding: 1rem;
-  text-align: center;
-  font-weight: 700;
-  margin: 0 1rem;
-  :hover {
-    cursor: pointer;
-  }
-`;
-
-const CompleteBtn = styled.button`
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: white;
-  border: 1px solid grey;
-  margin: auto 1rem auto 0;
-
-  @keyframes pulse {
-  from {
-    transform: scale3d(1, 1, 1);
-  }
-
-  50% {
-    transform: scale3d(1.2, 1.2, 1.2);
-  }
-
-  to {
-    transform: scale3d(1, 1, 1);
-  }
-}
-
-  :hover {
-    animation: pulse 0.6s linear both;
-  }
-`;
-
-const DeleteBtn = styled.button`
-  cursor: pointer;
-  opacity: 0.7;
-  margin: auto 0 auto 1rem;;
-  background-color: rgb(255, 191, 191);
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 1px solid red;
-  color: white;
-  font-weight: 700;
-
-  @keyframes shake {
-  from,
-  to {
-    transform: translate3d(0, 0, 0);
-  }
-
-  10%,
-  30%,
-  50%,
-  70%,
-  90% {
-    transform: translate3d(-5px, 0, 0);
-  }
-
-  20%,
-  40%,
-  60%,
-  80% {
-    transform: translate3d(5px, 0, 0);
-  }
-  }
-
-  :hover {
-    animation: shake 0.4s linear both;
   }
 `;
