@@ -1,5 +1,8 @@
 # Redux & React
 
+My project result:
+![](redux_todo_result.gif)
+
 Topics:
 
 * `redux` package
